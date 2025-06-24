@@ -8,10 +8,10 @@ import RetailerDashboard from "./components/RetailerDashboard"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AddProduct from "./components/AddProduct"
 import ProductsList from "./components/ProductsList"
-import { Toaster } from "react-hot-toast";
 
 
-<Toaster position="top-center" reverseOrder={false} />
+
+{/* <Toaster position="top-center" reverseOrder={false} /> */}
 
 
 const appRouter = createBrowserRouter([
@@ -29,6 +29,20 @@ const appRouter = createBrowserRouter([
     element:<Signup/>
 
   },
+  {
+    path:"/retailer/dashboard",
+    element:<RetailerDashboard/>
+  },
+  {
+    path:"/retailer/add",
+    element :<AddProduct/>
+  },
+  {
+    path:"/retailer/products",
+  element:<ProductsList/>
+
+  }
+  
   
 ]);
 
@@ -39,17 +53,18 @@ function App() {
     
     <>
   
-     {/* <RouterProvider router={appRouter}/> */}
-      <Router>
+     <RouterProvider router={appRouter}/> 
+      {/* <Router>
       <Routes>
-        <Route path="/" element={<RetailerDashboard />} />
+        <Route path="/retailer" element={<RetailerDashboard />} />
         <Route path="/add" element={<AddProduct />} />
         <Route path="/product" element={<ProductsList />} />
-        {/* <Route path="/signup" element={<ProductsList />} />
+        
+         <Route path="/signup" element={<ProductsList />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+        <Route path="/forgot-password" element={<ForgotPassword />} /> 
       </Routes>
-    </Router>
+    </Router> */}
      
     </>
   )
