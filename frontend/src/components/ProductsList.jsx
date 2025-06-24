@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
-import toast from "react-hot-toast";
+import {toast} from "sonner";
 
 
 
