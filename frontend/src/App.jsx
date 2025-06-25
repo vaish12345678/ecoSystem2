@@ -5,11 +5,12 @@ import Signup from "./components/Auth/Signup"
 import Home from "./components/Home"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RetailerDashboard from "./components/RetailerDashboard"
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import AddProduct from "./components/AddProduct"
 import ProductsList from "./components/ProductsList"
-
-
+import ProductDetails from './components/ProductDetails'
+import CusProductList from './components/Customer/CusProductList';
+import CusProductDetails from './components/Customer/CusProductDetails'
 
 {/* <Toaster position="top-center" reverseOrder={false} /> */}
 
@@ -30,18 +31,30 @@ const appRouter = createBrowserRouter([
 
   },
   {
-    path:"/retailer/dashboard",
+    path:"retailer/dashboard",
     element:<RetailerDashboard/>
   },
   {
-    path:"/retailer/add",
+    path:"retailer/add",
     element :<AddProduct/>
   },
   {
-    path:"/retailer/products",
+    path:"retailer/products",
   element:<ProductsList/>
+},
+{
+  path:"retailer/products/:id",
+  element : <ProductDetails/>
+},
+{
+  path:"/products",
+  element : <CusProductList/>
+},
+{
+  path:"/products/:id",
+  element:<CusProductDetails/>
+},
 
-  }
   
   
 ]);
@@ -54,6 +67,7 @@ function App() {
     <>
   
      <RouterProvider router={appRouter}/> 
+    
       {/* <Router>
       <Routes>
         <Route path="/retailer" element={<RetailerDashboard />} />

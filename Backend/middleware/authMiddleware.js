@@ -32,6 +32,7 @@ const isAuthenticated= async(req, res, next)=>{
         req.user=user,
         req.role=decoded.role
         req.id=decoded.userId;
+        // req.id= decoded.id,
         next();
     }catch(error){
 

@@ -13,7 +13,7 @@ const connectDb= async()=>{
 
 
 // export default connectDb;
-// import mongoose from "mongoose";
+
 
 // const connectDb = async () => {
 //   try {
