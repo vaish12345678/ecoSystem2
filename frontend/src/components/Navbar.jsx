@@ -35,7 +35,7 @@ const Navbar = () => {
     });
     setUser(null);
     setRole("");
-    navigate("/login") // or use navigate()
+    navigate("/") // or use navigate()
   } catch (error) {
     console.log("Logout failed:", error);
   }
@@ -56,16 +56,16 @@ const Navbar = () => {
             user && user.role === "retailer" ? (
               <>
               <li>
-                <Link to="/retailer/dashboard" className="hover:text-green-600">Dashboard</Link>
+                <Link to="retailer/dashboard" className="hover:text-green-600">Dashboard</Link>
               </li>
               <li>
-                <Link to="/retailer/add" className="hover:text-green-600">Add Product</Link>
+                <Link to="retailer/add" className="hover:text-green-600">Add Product</Link>
               </li>
               <li>
-                <Link to="/retailer/products" className="hover:text-green-600">Products</Link>
+                <Link to="retailer/products" className="hover:text-green-600">Products</Link>
               </li>
               <li>
-                <Link to="/retailer/orders" className="hover:text-green-600">Orders</Link>
+                <Link to="retailer/orders" className="hover:text-green-600">Orders</Link>
               </li>
               </>
             ):(

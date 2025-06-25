@@ -72,6 +72,7 @@ export default function AddProduct() {
       const res = await fetch("http://localhost:3000/api/products/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials:"include",
         body: JSON.stringify(payload),
       });
 
