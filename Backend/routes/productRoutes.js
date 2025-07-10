@@ -4,14 +4,34 @@ import isAuthenticated from "../middleware/authMiddleware.js";
 import mongoose from "mongoose"
 const router = express.Router();
 
-function calculateEcoScore(recyclablePercent, supplierRating, carbonFootprint) {
-  const score =
+// function calculateEcoScore(recyclablePercent, supplierRating, carbonFootprint) {
+//   const score =
+//     recyclablePercent * 0.4 +
+//     supplierRating * 5 * 0.3 +
+//     (100 - carbonFootprint) * 0.3;
+
+//   return Math.min(Math.max(Math.round(score), 0), 100);
+// }
+
+
+function calculateEcoScore(recyclablePercent, supplierRating, carbonFootprint, packagingType) {
+  let score =
     recyclablePercent * 0.4 +
-    supplierRating * 5 * 0.3 +
+    supplierRating * 5 * 0.3 + 
     (100 - carbonFootprint) * 0.3;
 
-  return Math.min(Math.max(Math.round(score), 0), 100);
+  const packagingBonus = {
+    "Plastic-Free": 10,
+    "Compostable": 8,
+    "Biodegradable": 5,
+    "Recyclable": 2,
+  };
+
+  score += packagingBonus[packagingType] || 0;
+
+  return Math.min(Math.max(Math.round(score), 0), 100); // Clamp between 0-100
 }
+
 
 // Get all products
 router.get("/", async (req, res) => {
@@ -28,12 +48,14 @@ router.post("/add",isAuthenticated, async (req, res) => {
     recyclablePercent,
     supplierRating,
     carbonFootprint,
+    packagingType,
   } = req.body;
 
    const sustainabilityScore = calculateEcoScore(
     recyclablePercent,
     supplierRating,
-    carbonFootprint
+    carbonFootprint,
+    packagingType,
   );
   
   const product = new Product({
@@ -44,6 +66,7 @@ router.post("/add",isAuthenticated, async (req, res) => {
     supplierRating,
     carbonFootprint,
     sustainabilityScore,
+    packagingType,
     retailerId: req.id,
   });
 
@@ -117,20 +140,6 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
-
-
-// router.get("/my-products", isAuthenticated, async (req, res) => {
-//   try {
-//     const products = await Product.find({ retailerId: req.id }).sort({
-//       createdAt: -1,
-//     });
-//     res.json({ success: true, products });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: error.message });
-//   }
-// });
-
 
 
 

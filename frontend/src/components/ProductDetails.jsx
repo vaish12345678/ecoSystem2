@@ -22,6 +22,8 @@ export default function ProductDetails() {
       <p><strong>Supplier Rating:</strong> {product.supplierRating}</p>
       <p><strong>Carbon Footprint:</strong> {product.carbonFootprint}</p>
       <p><strong>Sustainability Score:</strong> {product.sustainabilityScore}</p>
+      
+
 
       {/* Optional: Display likes/comments */}
       <div className="mt-4">
