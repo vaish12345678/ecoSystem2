@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
-
+import { useNavigate } from "react-router-dom";
 export default function AddProduct() {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,7 +15,7 @@ export default function AddProduct() {
   const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-
+  const navigate=useNavigate();
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
@@ -88,6 +88,7 @@ export default function AddProduct() {
         image: null,
       });
       setImagePreview(null);
+      navigate("/retailer/products");
     } catch (err) {
       console.error(err);
       setMessage("❌ Error adding product. Please try again.");
