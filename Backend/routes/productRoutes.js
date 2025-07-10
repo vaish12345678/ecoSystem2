@@ -3,16 +3,7 @@ import Product from "../models/Product.js";
 import isAuthenticated from "../middleware/authMiddleware.js";
 import mongoose from "mongoose"
 const router = express.Router();
-
-// function calculateEcoScore(recyclablePercent, supplierRating, carbonFootprint) {
-//   const score =
-//     recyclablePercent * 0.4 +
-//     supplierRating * 5 * 0.3 +
-//     (100 - carbonFootprint) * 0.3;
-
-//   return Math.min(Math.max(Math.round(score), 0), 100);
-// }
-
+import { User } from "../models/User.js";
 
 function calculateEcoScore(recyclablePercent, supplierRating, carbonFootprint, packagingType) {
   let score =
@@ -21,7 +12,8 @@ function calculateEcoScore(recyclablePercent, supplierRating, carbonFootprint, p
     (100 - carbonFootprint) * 0.3;
 
   const packagingBonus = {
-    "Plastic-Free": 10,
+   
+   "Plastic-Free": 10,
     "Compostable": 8,
     "Biodegradable": 5,
     "Recyclable": 2,
@@ -35,7 +27,7 @@ function calculateEcoScore(recyclablePercent, supplierRating, carbonFootprint, p
 
 // Get all products
 router.get("/", async (req, res) => {
-  const products = await Product.find().sort({ createdAt: -1 });
+   const products = await Product.find().sort({ createdAt: -1 });
   res.json(products);
 });
 
@@ -49,6 +41,7 @@ router.post("/add",isAuthenticated, async (req, res) => {
     supplierRating,
     carbonFootprint,
     packagingType,
+    
   } = req.body;
 
    const sustainabilityScore = calculateEcoScore(
@@ -103,13 +96,12 @@ router.delete("/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-
-
 router.get("/my-products", isAuthenticated, async (req, res) => {
   try {
     const products = await Product.find({ retailerId: req.user._id }).sort({ createdAt: -1 });
 
-    res.json({ success: true, products });
+    res.json({ success: true, 
+       user: { role: req.user.role }, products });
   } catch (error) {
     console.error("Error in /my-products:", error);
     res.status(500).json({ success: false, message: error.message });
@@ -127,19 +119,6 @@ router.get("/me", isAuthenticated, async (req, res) => {
 });
 
 
-
-router.get("/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-    res.json(product);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
 
 
 

@@ -56,7 +56,7 @@ const Navbar = () => {
             user && user.role === "retailer" ? (
               <>
               <li>
-                <Link to="retailer/dashboard" className="hover:text-green-600">Dashboard</Link>
+                <Link to="/retailer/dashboard" className="hover:text-green-600">Dashboard</Link>
               </li>
               <li>
                 <Link to="retailer/add" className="hover:text-green-600">Add Product</Link>
