@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent } from "../ui/card";
@@ -16,6 +15,31 @@ export default function CusProductsList() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const getEcoScoreBadge = (score) => {
+    if (score >= 80) {
+      return { color: "bg-green-600", label: "Excellent" };
+    } else if (score >= 50) {
+      return { color: "bg-yellow-500", label: "Moderate" };
+    } else {
+      return { color: "bg-red-500", label: "Poor" };
+    }
+  };
+
+  const getBadgeColor = (type) => {
+    switch (type) {
+      case "Plastic-Free":
+        return "bg-green-200 text-green-800";
+      case "Compostable":
+        return "bg-yellow-200 text-yellow-800";
+      case "Biodegradable":
+        return "bg-blue-200 text-blue-800";
+      case "Recyclable":
+        return "bg-gray-200 text-gray-800";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -125,14 +149,35 @@ export default function CusProductsList() {
                     className="h-48 w-full object-cover rounded mb-4"
                   />
                 )}
-                <h3 className="text-xl font-bold text-gray-800">{product.name}</h3>
+                <h3 className="text-xl font-bold text-gray-800">
+                  {product.name}
+                </h3>
                 <p className="text-gray-600">{product.category}</p>
-                <p className="text-sm text-green-600 mt-1">
-                  ♻️ Sustainability Score: {product.sustainabilityScore || 80}/100
-                </p>
+                {(() => {
+                  const { color, label } = getEcoScoreBadge(
+                    product.sustainabilityScore || 80
+                  );
+                  return (
+                    <div
+                      className={`inline-block px-3 py-1 text-xs font-semibold text-white rounded-full ${color} mt-2`}
+                    >
+                      ♻️ {label}: {product.sustainabilityScore || 80}/100
+                    </div>
+                  );
+                })()}
+                <span
+                  className={`px-2 py-1 rounded text-xs ${getBadgeColor(
+                    product.packagingType
+                  )}`}
+                >
+                  {product.packagingType}
+                </span>
 
                 <div className="flex justify-between items-center mt-4 text-sm">
-                  <Button onClick={() => handleLike(product._id)} variant="outline">
+                  <Button
+                    onClick={() => handleLike(product._id)}
+                    variant="outline"
+                  >
                     ❤️ {product.likes || 0}
                   </Button>
                 </div>

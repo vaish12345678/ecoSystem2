@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent } from "./ui/card";
@@ -16,6 +15,16 @@ export default function ProductsList() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const getEcoScoreBadge = (score) => {
+    if (score >= 80) {
+      return { color: "bg-green-600", label: "Excellent" };
+    } else if (score >= 50) {
+      return { color: "bg-yellow-500", label: "Moderate" };
+    } else {
+      return { color: "bg-red-500", label: "Poor" };
+    }
+  };
 
   useEffect(() => {
     applyFilter();
@@ -63,9 +72,10 @@ export default function ProductsList() {
   };
 
   const applyFilter = () => {
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category?.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.category?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProducts(filtered);
   };
@@ -98,14 +108,28 @@ export default function ProductsList() {
                   className="h-48 w-full object-cover rounded mb-4"
                 />
               )}
-              <h3 className="text-xl font-bold text-gray-800">{product.name}</h3>
+              <h3 className="text-xl font-bold text-gray-800">
+                {product.name}
+              </h3>
               <p className="text-gray-600">{product.category}</p>
-              <p className="text-sm text-green-600 mt-1">
-                ♻️ Sustainability Score: {product.sustainabilityScore || 80}/100
-              </p>
+              {(() => {
+                const { color, label } = getEcoScoreBadge(
+                  product.sustainabilityScore || 80
+                );
+                return (
+                  <div
+                    className={`inline-block px-3 py-1 text-xs font-semibold text-white rounded-full ${color} mt-2`}
+                  >
+                    ♻️ {label}: {product.sustainabilityScore || 80}/100
+                  </div>
+                );
+              })()}
 
               <div className="flex justify-between items-center mt-4 text-sm">
-                <Button onClick={() => handleLike(product._id)} variant="outline">
+                <Button
+                  onClick={() => handleLike(product._id)}
+                  variant="outline"
+                >
                   ❤️ {product.likes || 0}
                 </Button>
                 <Button
