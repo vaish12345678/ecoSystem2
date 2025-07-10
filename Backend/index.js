@@ -8,7 +8,7 @@ import connectDb from "./utils/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js"; // ✅ NEW
 import advisorRoutes from "./routes/advisor.js";
-
+import dashboardRoutes from "./routes/retailer.js"
 
 // App config
 const app = express();
@@ -33,6 +33,7 @@ app.get("/home", (req, res) => {
 app.use("/api/v1/user", userRoutes);
 app.use("/api/products", productRoutes); // ✅ Mount product & upload routes
 app.use("/api/advisor", advisorRoutes);
+app.use("/api/retailer",dashboardRoutes);
 
 // Server listen
 const PORT = process.env.PORT || 3000;
