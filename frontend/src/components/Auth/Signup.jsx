@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Navbar";
 import axios from "axios";
 import { USER_API_POINT }  from "../../utils/Apicall"
-
+import { toast } from "sonner";
 function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -39,6 +39,7 @@ function Signup() {
         },
       });
       if (res.data.success) {
+        toast.success("registered successfully!!!")
         navigate("/login");
       }
     } catch (error) {
