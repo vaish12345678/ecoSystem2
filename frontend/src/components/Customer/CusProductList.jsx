@@ -26,6 +26,17 @@ export default function CusProductsList() {
     }
   };
 
+  
+  const getCO2Badge = (co2) => {
+    if (co2 <= 20) {
+      return { color: "bg-green-600", label: "Low CO₂" };
+    } else if (co2 <= 50) {
+      return { color: "bg-yellow-500", label: "Moderate CO₂" };
+    } else {
+      return { color: "bg-red-500", label: "High CO₂" };
+    }
+  };
+
   const getBadgeColor = (type) => {
     switch (type) {
       case "Plastic-Free":
@@ -172,6 +183,19 @@ export default function CusProductsList() {
                 >
                   {product.packagingType}
                 </span>
+
+                 {(() => {
+                const co2 =
+                  parseFloat(product.carbonFootprint?.toFixed(2)) || 0;
+                const { color, label } = getCO2Badge(co2);
+                return (
+                  <div
+                    className={`inline-block px-3 py-1 text-xs font-semibold text-white rounded-full ${color} mt-2`}
+                  >
+                    🌍 {label}: {co2} kg of CO₂
+                  </div>
+                );
+              })()}
 
                 <div className="flex justify-between items-center mt-4 text-sm">
                   <Button

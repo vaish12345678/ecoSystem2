@@ -8,7 +8,7 @@ export default function AddProduct() {
     category: "",
     recyclablePercent: "",
     supplierRating: "",
-    carbonFootprint: "",
+     transportDistanceKm: "",
     packagingType: "",
     image: null,
   });
@@ -69,6 +69,7 @@ export default function AddProduct() {
       supplierRating: formData.supplierRating,
       carbonFootprint: formData.carbonFootprint,
       packagingType: formData.packagingType,
+       transportDistanceKm: formData.transportDistanceKm,
       imageUrl,
     };
 
@@ -90,6 +91,7 @@ export default function AddProduct() {
         supplierRating: "",
         carbonFootprint: "",
         packagingType: "",
+         transportDistanceKm: "",
         image: null,
       });
       setImagePreview(null);
@@ -180,14 +182,16 @@ export default function AddProduct() {
           </select>
 
           <input
-            type="number"
-            name="carbonFootprint"
-            placeholder="Carbon Footprint (kg CO₂)"
-            className="w-full border p-2 rounded"
-            value={formData.carbonFootprint}
-            onChange={handleChange}
-            required
-          />
+  type="number"
+  name="transportDistanceKm"
+  placeholder="Transport Distance (in km)"
+  className="w-full border p-2 rounded"
+  value={formData.transportDistanceKm}
+  onChange={handleChange}
+  required
+/>
+
+
           <input
             type="file"
             name="image"

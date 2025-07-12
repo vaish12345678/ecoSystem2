@@ -5,6 +5,35 @@ import mongoose from "mongoose"
 const router = express.Router();
 import { User } from "../models/User.js";
 
+
+function calculateCarbonFootprint(category, transportDistanceKm, packagingType) {
+  // Material base emissions in kg CO2 per kg
+  const materialEmissions = {
+    Plastic: 6,
+    Cotton: 2,
+    Aluminum: 10,
+    Bamboo: 1.5,
+    Paper: 1.8,
+    Other: 5,
+  };
+
+  const packagingEmissions = {
+    "Plastic-Free": 0.2,
+    "Compostable": 0.5,
+    "Biodegradable": 1,
+    "Recyclable": 1.5,
+    "Plastic": 2.5,
+  };
+
+  const materialCO2 = materialEmissions[category] || 5;
+  const packagingCO2 = packagingEmissions[packagingType] || 2;
+  const transportCO2 = 0.05 * transportDistanceKm; // 0.05 kg CO2 per km
+
+  const totalCO2 = materialCO2 + packagingCO2 + transportCO2;
+  return parseFloat(totalCO2.toFixed(2));
+}
+
+
 function calculateEcoScore(recyclablePercent, supplierRating, carbonFootprint, packagingType) {
   let score =
     recyclablePercent * 0.4 +
@@ -31,6 +60,37 @@ router.get("/", async (req, res) => {
   res.json(products);
 });
 
+
+router.get("/my-products", isAuthenticated, async (req, res) => {
+  try {
+     console.log("req.id:", req.id);
+    console.log("req.user:", req.user);
+    
+    const products = await Product.find({ retailerId: req.id })
+
+    res.json({ success: true, 
+       user: { role: req.user.role }, products });
+  } catch (error) {
+    console.error("Error in /my-products:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Get a single product by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 // Add a product
 router.post("/add",isAuthenticated, async (req, res) => {
   const {
@@ -39,10 +99,13 @@ router.post("/add",isAuthenticated, async (req, res) => {
     imageUrl,
     recyclablePercent,
     supplierRating,
-    carbonFootprint,
+    
     packagingType,
+    transportDistanceKm,
     
   } = req.body;
+
+    const carbonFootprint = calculateCarbonFootprint(category, transportDistanceKm, packagingType);
 
    const sustainabilityScore = calculateEcoScore(
     recyclablePercent,
@@ -60,6 +123,7 @@ router.post("/add",isAuthenticated, async (req, res) => {
     carbonFootprint,
     sustainabilityScore,
     packagingType,
+     transportDistanceKm,
     retailerId: req.id,
   });
 
@@ -96,27 +160,6 @@ router.delete("/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-router.get("/my-products", isAuthenticated, async (req, res) => {
-  try {
-    const products = await Product.find({ retailerId: req.user._id }).sort({ createdAt: -1 });
-
-    res.json({ success: true, 
-       user: { role: req.user.role }, products });
-  } catch (error) {
-    console.error("Error in /my-products:", error);
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-router.get("/me", isAuthenticated, async (req, res) => {
-  try {
-    const user = await User.findById(req.id).select("-password");
-    res.json({ user });
-  } catch (err) {
-    console.error("Failed to get user:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
 
 
