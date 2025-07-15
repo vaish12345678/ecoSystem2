@@ -18,78 +18,56 @@ export default function ProductsList() {
 
   const getEcoScoreBadge = (score) => {
     if (score >= 80) {
-      return { color: "bg-green-600", label: "Excellent" };
+      return { color: "bg-gradient-to-r from-[#00C853] to-[#64dd17] text-white", label: "Excellent" };
     } else if (score >= 50) {
-      return { color: "bg-yellow-500", label: "Moderate" };
+      return { color: "bg-gradient-to-r from-[#FBC02D] to-[#FF9800] text-white", label: "Moderate" };
     } else {
-      return { color: "bg-red-500", label: "Poor" };
+      return { color: "bg-gradient-to-r from-[#E53935] to-[#FF5252] text-white", label: "Poor" };
     }
   };
 
   const getCO2Badge = (co2) => {
     if (co2 <= 20) {
-      return { color: "bg-green-600", label: "Low CO₂" };
+      return { color: "bg-[#00C853] text-white", label: "Low CO₂" };
     } else if (co2 <= 50) {
-      return { color: "bg-yellow-500", label: "Moderate CO₂" };
+      return { color: "bg-[#FBC02D] text-white", label: "Moderate CO₂" };
     } else {
-      return { color: "bg-red-500", label: "High CO₂" };
+      return { color: "bg-[#E53935] text-white", label: "High CO₂" };
     }
   };
 
   const getBadgeColor = (type) => {
     switch (type) {
       case "Plastic-Free":
-        return "bg-green-200 text-green-800";
+        return "bg-[#8BC34A] text-white";
       case "Compostable":
-        return "bg-yellow-200 text-yellow-800";
+        return "bg-[#FF9800] text-white";
       case "Biodegradable":
-        return "bg-blue-200 text-blue-800";
+        return "bg-[#64dd17] text-white";
       case "Recyclable":
-        return "bg-gray-200 text-gray-800";
+        return "bg-[#00C853] text-white";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-[#9E9E9E] text-white";
     }
   };
+
   useEffect(() => {
     applyFilter();
   }, [searchTerm, products]);
 
-  // const fetchProducts = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       "http://localhost:3000/api/products/my-products",
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     const userRole = res.data?.user?.role;
-  //     setRole(userRole);
-
-  //     // if (userRole === "retailer") {
-  //     //   navigate("/retailer/products");
-  //     //   return;
-  //     // }
-
-  //     const productRes = await axios.get("http://localhost:3000/api/products");
-  //     setProducts(productRes.data);
-  //   } catch (err) {
-  //     console.error("Failed to fetch products:", err);
-  //   }
-  // };
-const fetchProducts = async () => {
-  try {
-    const res = await axios.get(
-      "http://localhost:3000/api/products/my-products",
-      {
-        withCredentials: true,
-      }
-    );
-
-    setProducts(res.data.products); // Set the user's own products only
-  } catch (err) {
-    console.error("Failed to fetch my products:", err);
-  }
-};
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/api/products/my-products",
+        {
+          withCredentials: true,
+        }
+      );
+      setProducts(res.data.products);
+    } catch (err) {
+      console.error("Failed to fetch my products:", err);
+    }
+  };
 
   const handleLike = async (id) => {
     try {
@@ -119,104 +97,114 @@ const fetchProducts = async () => {
   };
 
   return (
-    <div className="px-4 py-6">
+    <div className="px-4 py-6 bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] min-h-screen">
       {/* Search Bar */}
-      <div className="mb-6 max-w-md">
+      <div className="mb-6 max-w-md mx-auto">
         <input
           type="text"
           placeholder="Search by name or category..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full border border-[#9E9E9E] rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#00C853] placeholder-[#e0f2f1] bg-[rgba(255,255,255,0.1)] text-[#e0f2f1]"
         />
       </div>
 
       {/* Products Grid */}
-      <div>
-         {filteredProducts.length === 0 ? (
-    <p className="text-center text-gray-500 text-lg">🚫 No products added yet.</p>
-  ) : (
-        
+      {filteredProducts.length === 0 ? (
+        <p className="text-center text-[#e0f2f1] text-lg">🚫 No products added yet.</p>
+      ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProducts.map((product) => (
-          <Card
-            key={product._id}
-            className="shadow-md rounded-xl overflow-hidden"
-          >
-            <CardContent className="p-4">
-              {product.imageUrl && (
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="h-48 w-full object-cover rounded mb-4"
-                />
-              )}
-              <h3 className="text-xl font-bold text-gray-800">
-                {product.name}
-              </h3>
-              <p className="text-gray-600">{product.category}</p>
-              {(() => {
-                const { color, label } = getEcoScoreBadge(
-                  product.sustainabilityScore || 80
-                );
-                return (
-                  <div
-                    className={`inline-block px-3 py-1 text-xs font-semibold text-white rounded-full ${color} mt-2`}
+          {filteredProducts.map((product) => (
+            <Card
+              key={product._id}
+              className="bg-transparent rounded-2xl overflow-hidden transition-transform transform hover:scale-[1.02] hover:shadow-[0_0_30px_#64dd17] duration-300"
+            >
+              <CardContent className="p-4">
+                {/* Product Image */}
+                {product.imageUrl && (
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="h-48 w-full object-cover rounded-md mb-4 transition-transform duration-300 hover:scale-105"
+                  />
+                )}
+
+                {/* Name & Category */}
+                <h3 className="text-xl font-semibold from-[#0f2027] via-[#203a43] to-[#2c5364] mb-1">
+                  {product.name}
+                </h3>
+                <p className="text-[#9E9E9E] mb-2">🏷 {product.category}</p>
+
+                {/* Eco Score Badge */}
+                {(() => {
+                  const { color, label } = getEcoScoreBadge(
+                    product.sustainabilityScore || 80
+                  );
+                  return (
+                    <div
+                      className={`${color} inline-block px-3 py-1 text-xs font-semibold rounded-full mb-1`}
+                    >
+                      ♻ {label} EcoScore: {product.sustainabilityScore || 80}/100
+                    </div>
+                  );
+                })()}
+
+                {/* Packaging Type */}
+                <div className="mt-1">
+                  <span
+                    className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${getBadgeColor(
+                      product.packagingType
+                    )}`}
                   >
-                    ♻️ {label} ecoScore : {product.sustainabilityScore || 80}/100
-                  </div>
-                );
-              })()}
-              <span
-                  className={`px-2 py-1 rounded text-xs ${getBadgeColor(
-                    product.packagingType
-                  )}`}
-                >
-                  {product.packagingType}
-                </span>
+                    📦 {product.packagingType}
+                  </span>
+                </div>
 
-              {(() => {
-                const co2 =
-                  parseFloat(product.carbonFootprint?.toFixed(2)) || 0;
-                const { color, label } = getCO2Badge(co2);
-                return (
-                  <div
-                    className={`inline-block px-3 py-1 text-xs font-semibold text-white rounded-full ${color} mt-2`}
+                {/* Carbon Footprint */}
+                {(() => {
+                  const co2 =
+                    parseFloat(product.carbonFootprint?.toFixed(2)) || 0;
+                  const { color, label } = getCO2Badge(co2);
+                  return (
+                    <div
+                      className={`${color} inline-block px-3 py-1 text-xs font-semibold rounded-full mt-2`}
+                    >
+                      🌍 {label}: {co2} kg CO₂
+                    </div>
+                  );
+                })()}
+
+                {/* Like & Delete Buttons */}
+                <div className="flex justify-between items-center mt-4 gap-2">
+                  <Button
+                    onClick={() => handleLike(product._id)}
+                    variant="outline"
+                    className="w-full text-[#e0f2f1] border-[#64dd17] hover:bg-[#64dd17] hover:text-white transition"
                   >
-                    🌍 {label}: {co2} kg of CO₂
-                  </div>
-                );
-              })()}
+                    ❤ {product.likes || 0}
+                  </Button>
+                  <Button
+                    onClick={() => handleDelete(product._id)}
+                    variant="destructive"
+                    className="w-full transition"
+                  >
+                    🗑 Delete
+                  </Button>
+                </div>
 
-              <div className="flex justify-between items-center mt-4 text-sm">
-                <Button
-                  onClick={() => handleLike(product._id)}
-                  variant="outline"
-                >
-                  ❤️ {product.likes || 0}
-                </Button>
-                <Button
-                  onClick={() => handleDelete(product._id)}
-                  variant="destructive"
-                >
-                  🗑️ Delete
-                </Button>
-              </div>
-
-              <div className="mt-3">
-                <Link to={`/products/${product._id}`}>
-                  <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
-                    View Details
-                  </button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>)}
+                {/* View Details */}
+                <div className="mt-3">
+                  <Link to={`/products/${product._id}`}>
+                    <button className="w-full bg-gradient-to-r from-[#00C853] to-[#64dd17] text-white px-4 py-2 rounded-md hover:opacity-90 transition">
+                      View Details
+                    </button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
-        
-  </div>
-      
   );
 }
