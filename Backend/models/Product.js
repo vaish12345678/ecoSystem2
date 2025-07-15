@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
     category: {
     type: String,
     required: true,
-    enum: ['Cotton', 'Plastic', 'Aluminum', 'Bamboo', 'Paper', 'Other'],
+    enum: ['Cotton', 'Plastic', 'Aluminum', 'Bamboo', 'Paper', 'Other','glass'],
   },
   imageUrl: String,
   recyclablePercent: Number,
@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
   carbonFootprint: Number,
   sustainabilityScore: Number,
   likes: { type: Number, default: 0 },
-  transportDistanceKm: { type: Number, required: true },
+  transportDistanceKm: { type: Number},
   packagingType: {
     type: String,
     enum: ['Plastic-Free', 'Compostable', 'Biodegradable', 'Recyclable'],

@@ -1,26 +1,27 @@
 import './App.css'
-import Navbar from "./components/Navbar"
+import LandingPage from './components/LandingPage'
 import Login from "./components/Auth/Login"
 import Signup from "./components/Auth/Signup"
-import Home from "./components/Home"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RetailerDashboard from "./components/RetailerDashboard"
-
 import AddProduct from "./components/AddProduct"
 import ProductsList from "./components/ProductsList"
 import ProductDetails from './components/ProductDetails'
 import CusProductList from './components/Customer/CusProductList';
 import CusProductDetails from './components/Customer/CusProductDetails'
-
-{/* <Toaster position="top-center" reverseOrder={false} /> */}
+import CustomerDashboard from './components/Customer/Dashboard1'
+import RetailerDashboard from './components/retailer'
+import ChatBot from './components/Chatbox'
 
 
 const appRouter = createBrowserRouter([
   {
     path:"/",
-    element :<Home/>
+    element :<LandingPage/>
 
-  }, 
+  },{
+    path:"/Dashboard1",
+    element:<CustomerDashboard/>
+  },
   {
     path:"/login",
     element:<Login/>
@@ -30,10 +31,7 @@ const appRouter = createBrowserRouter([
     element:<Signup/>
 
   },
-  {
-    path:"retailer/dashboard",
-    element:<RetailerDashboard/>
-  },
+  
   {
     path:"retailer/add",
     element :<AddProduct/>
@@ -58,6 +56,10 @@ const appRouter = createBrowserRouter([
   path:"/retailer",
   element:<RetailerDashboard/>
 },
+{
+  path:"/Chatbox",
+  element:<ChatBot/>
+}
 
   
   
@@ -69,21 +71,7 @@ function App() {
   return (
     
     <>
-  
      <RouterProvider router={appRouter}/> 
-    
-      {/* <Router>
-      <Routes>
-        <Route path="/retailer" element={<RetailerDashboard />} />
-        <Route path="/add" element={<AddProduct />} />
-        <Route path="/product" element={<ProductsList />} />
-        
-         <Route path="/signup" element={<ProductsList />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} /> 
-      </Routes>
-    </Router> */}
-     
     </>
   )
 }

@@ -140,7 +140,7 @@ export default function AddProduct() {
             onChange={handleChange}
             required
           />
-          <input
+          {/* <input
             type="text"
             name="category"
             placeholder="Category"
@@ -148,7 +148,22 @@ export default function AddProduct() {
             value={formData.category}
             onChange={handleChange}
             required
-          />
+          /> */}
+           <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          >
+            <option value="">Select category Type</option>
+            <option value="Bamboo">Bamboo</option>
+            <option value="Plastic">Plastic</option>
+            
+            <option value="Cotton">Cotton</option>
+             <option value="Aluminium">Aluminium</option>
+              <option value="Paper">Paper</option>
+          </select>
           <input
             type="number"
             name="recyclablePercent"

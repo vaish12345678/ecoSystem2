@@ -226,13 +226,7 @@ export default function CusProductsList() {
                   >
                     Post Comment
                   </Button>
-                  <div className="mt-3">
-                    <Link to={`/products/${product._id}`}>
-                      <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
-                        View Details
-                      </button>
-                    </Link>
-                  </div>
+                  
                 </div>
 
                 {/* Show Comments */}
