@@ -19,7 +19,6 @@ const CustomerDashboard = () => {
   const [showPaymentQR, setShowPaymentQR] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [wishlist, setWishlist] = useState([]);
-  const [commentInputs, setCommentInputs] = useState({});
 
   // Mock data
   useEffect(() => {
@@ -29,29 +28,14 @@ const CustomerDashboard = () => {
     try {
       const res = await axios.get("http://localhost:3000/api/products");
       setProducts(res.data);
-      // setFilteredProducts(res.data);
+      setFilteredProducts(res.data);
     } catch (err) {
       console.error("Failed to fetch products:", err);
     }
   };
 
   
-  const handleCommentSubmit = async (id) => {
-    const text = commentInputs[id];
-    if (!text) return;
-
-    try {
-      await axios.post(`http://localhost:3000/api/products/${id}/comment`, {
-        text,
-      });
-      setCommentInputs((prev) => ({ ...prev, [id]: "" }));
-      fetchProducts();
-      toast.success("Comment added!");
-    } catch (err) {
-      console.error("Comment failed:", err);
-      toast.error("Something went wrong.");
-    }
-  };
+  
   
   const calculateUserScore = () => {
     const totalOrders = mockOrders.length;
@@ -131,219 +115,72 @@ const CustomerDashboard = () => {
     if (score >= 70) return 'text-yellow-600';
     return 'text-red-600';
   };
-
-// const renderProductCard = (product) => (
-//     <div key={product._id} className="bg-gradient-to-b from-green-50 to-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-green-100">
-//       <div className="relative">
-//         <img 
-//           src={product.imageUrl} 
-//           alt={product.name}
-//           className="w-full h-48 object-cover"
-//         />
-//         <button
-//           onClick={() => toggleWishlist(product)}
-//           className={`absolute top-2 right-2 p-2 rounded-full backdrop-blur-sm ${
-//             wishlist.find(item => item._id === product._id) 
-//               ? 'bg-green-600 text-white' 
-//               : 'bg-white/80 text-gray-600'
-//           } transition-colors`}
-//         >
-//           <Heart size={16} />
-//         </button>
-//         <div className="absolute top-2 left-2 bg-gradient-to-r from-green-500 to-teal-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
-//           <Leaf size={12} className="inline mr-1" />
-//           {product.sustainabilityScore}
-//         </div>
-//       </div>
-      
-//       <div className="p-5">
-//         <h3 className="font-bold text-lg mb-2 text-gray-800">{product.name}</h3>
-//         <div className="flex items-center mb-2">
-//           <Star className="text-yellow-400 mr-1" size={16} fill="#facc15" />
-//           <span className="text-sm text-gray-600">{product.supplierRating}</span>
-//           <span className="text-sm text-gray-500 ml-2">({product.likes} likes)</span>
-//         </div>
-        
-//         <div className="flex justify-between items-center mb-3">
-//           <span className="text-2xl font-bold text-green-600">${product.price}</span>
-//           <span className={`text-sm font-semibold px-2 py-1 rounded-full ${getSustainabilityColor(product.sustainabilityScore)}`}>
-//             {product.sustainabilityScore}% Sustainable
-//           </span>
-//         </div>
-        
-//         <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-3">
-//           <div>Recyclable: {product.recyclablePercent}%</div>
-//           <div>CO2: {product.carbonFootprint}kg</div>
-//           <div>Packaging: {product.packagingType}</div>
-//           <div>Transport: {product.transportDistanceKm}km</div>
-//         </div>
-        
-//         <button
-//           onClick={() => addToCart(product)}
-//           className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center"
-//         >
-//           <ShoppingCart size={16} className="mr-2" />
-//           Add to Cart
-//         </button>
-//          <div className="mt-4">
-//                   <input
-//                     type="text"
-//                     placeholder="Add a comment..."
-//                     value={commentInputs[product._id] || ""}
-//                     onChange={(e) =>
-//                       setCommentInputs((prev) => ({
-//                         ...prev,
-//                         [product._id]: e.target.value,
-//                       }))
-//                     }
-//                     className="border p-2 rounded text-sm w-full"
-//                   />
-//                   <Button
-//                     onClick={() => handleCommentSubmit(product._id)}
-//                     className="mt-2"
-//                   >
-//                     Post Feedback
-//                   </Button>
-                  
-//                 </div>
-
-//                 {/* Show Comments */}
-//                 {product.comments?.length > 0 && (
-//                   <div className="mt-4">
-//                     <h4 className="font-semibold text-sm mb-1">Feedback</h4>
-//                     <ul className="space-y-1 max-h-24 overflow-y-auto text-sm text-gray-700">
-//                       {product.comments.map((c, i) => (
-//                         <li key={i} className="border-b pb-1">
-//                           {c}
-//                         </li>
-//                       ))}
-//                     </ul>
-//                   </div>
-//                 )}
-      
-
-//         <div className="mt-3">
-//                 <Link to={`/products/${product._id}`}>
-//                   <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
-//                     View Details
-//                   </button>
-//                 </Link>
-//               </div>
-//       </div>
-//     </div>
-//   );
-
 const renderProductCard = (product) => (
   <div
     key={product._id}
-    className="bg-gradient-to-b from-[#e6f4ea] to-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-[#b7e4c7]"
+    className="transition-transform transform hover:scale-[1.02] hover:shadow-[0_0_30px_#64dd17] duration-300 rounded-xl overflow-hidden bg-[rgba(255,255,255,0.1)] backdrop-blur-md border border-white/20"
   >
     <div className="relative">
       <img
         src={product.imageUrl}
         alt={product.name}
-        className="w-full h-48 object-cover"
+        className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
       />
       <button
         onClick={() => toggleWishlist(product)}
-        className={`absolute top-2 right-2 p-2 rounded-full backdrop-blur-sm ${
+        className={`absolute top-2 right-2 p-2 rounded-full ${
           wishlist.find((item) => item._id === product._id)
-            ? "bg-[#2f855a] text-white"
-            : "bg-white/80 text-gray-600"
-        } transition-colors`}
+            ? "bg-gradient-to-r from-[#E53935] to-[#FF5252] text-white"
+            : "bg-white/50 text-gray-600"
+        }`}
       >
         <Heart size={16} />
       </button>
-      <div className="absolute top-2 left-2 bg-gradient-to-r from-[#38a169] to-[#319795] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
-        <Leaf size={12} className="inline mr-1" />
-        {product.sustainabilityScore}
+      <div className="absolute top-2 left-2 bg-gradient-to-r from-[#00C853] to-[#64dd17] text-white px-2 py-1 rounded-full text-xs flex items-center">
+        <Leaf size={12} className="inline mr-1" /> {product.sustainabilityScore}
       </div>
     </div>
 
-    <div className="p-5">
-      <h3 className="font-bold text-lg mb-2 text-[#22543d]">{product.name}</h3>
-      <div className="flex items-center mb-2">
-        <Star className="text-yellow-400 mr-1" size={16} fill="#facc15" />
-        <span className="text-sm text-gray-600">
-          {product.supplierRating}
-        </span>
-        <span className="text-sm text-gray-500 ml-2">
-          ({product.likes} likes)
-        </span>
+    <div className="p-4 text-[#e0f2f1]">
+      <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
+
+      <div className="flex items-center mb-2 text-[#9E9E9E]">
+        <Star className="text-yellow-500 mr-1" size={16} />
+        <span className="text-sm">{product.supplierRating}</span>
+        <span className="text-sm ml-2">({product.likes} likes)</span>
       </div>
 
       <div className="flex justify-between items-center mb-3">
-        <span className="text-2xl font-bold text-[#2f855a]">
+        <span className="text-2xl font-bold text-[#8BC34A]">
           ${product.price}
         </span>
         <span
-          className={`text-sm font-semibold px-2 py-1 rounded-full ${getSustainabilityColor(
-            product.sustainabilityScore
-          )}`}
+          className={`text-sm font-semibold bg-[rgba(255,255,255,0.2)] px-2 py-1 rounded ${
+            product.sustainabilityScore >= 80
+              ? "text-[#00C853]"
+              : product.sustainabilityScore >= 50
+              ? "text-[#FBC02D]"
+              : "text-[#E53935]"
+          }`}
         >
           {product.sustainabilityScore}% Sustainable
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-3">
+      <div className="grid grid-cols-2 gap-2 text-xs text-[#9E9E9E] mb-3">
         <div>Recyclable: {product.recyclablePercent}%</div>
-        <div>CO2: {product.carbonFootprint}kg</div>
+        <div>CO₂: {product.carbonFootprint}kg</div>
         <div>Packaging: {product.packagingType}</div>
         <div>Transport: {product.transportDistanceKm}km</div>
       </div>
 
       <button
         onClick={() => addToCart(product)}
-        className="w-full bg-[#38a169] text-white py-2 rounded-lg hover:bg-[#2f855a] transition-colors flex items-center justify-center"
+        className="w-full bg-gradient-to-r from-[#00C853] to-[#64dd17] text-white py-2 rounded-lg hover:opacity-90 transition"
       >
-        <ShoppingCart size={16} className="mr-2" />
+        <ShoppingCart size={16} className="inline mr-2" />
         Add to Cart
       </button>
-
-      <div className="mt-4">
-        <input
-          type="text"
-          placeholder="Add a comment..."
-          value={commentInputs[product._id] || ""}
-          onChange={(e) =>
-            setCommentInputs((prev) => ({
-              ...prev,
-              [product._id]: e.target.value,
-            }))
-          }
-          className="border border-green-200 p-2 rounded text-sm w-full"
-        />
-        <Button
-          onClick={() => handleCommentSubmit(product._id)}
-          className="mt-2 bg-[#48bb78] hover:bg-[#38a169] text-white"
-        >
-          Post Feedback
-        </Button>
-      </div>
-
-      {/* Show Comments */}
-      {product.comments?.length > 0 && (
-        <div className="mt-4">
-          <h4 className="font-semibold text-sm mb-1 text-[#22543d]">
-            Feedback
-          </h4>
-          <ul className="space-y-1 max-h-24 overflow-y-auto text-sm text-gray-700">
-            {product.comments.map((c, i) => (
-              <li key={i} className="border-b pb-1">
-                {c}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <div className="mt-3">
-        <Link to={`/products/${product._id}`}>
-          <button className="bg-[#2f855a] text-white px-4 py-2 rounded hover:bg-[#276749] transition">
-            View Details
-          </button>
-        </Link>
-      </div>
     </div>
   </div>
 );
@@ -480,15 +317,19 @@ const renderPaymentModal = () =>
 <button
   onClick={() => {
     const newOrder = {
-      _id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
-      paymentMethod: 'QR Payment',
-      status: 'processing',
-      trackingNumber: 'TRACK' + Math.floor(100000 + Math.random() * 900000),
-      total: getCartTotal(),
-      items: [...cart],
-      sustainabilityImpact: `${Math.round(cart.reduce((sum, item) => sum + item.sustainabilityScore, 0) / cart.length)}%`
-    };
+  _id: Date.now().toString(),
+  date: new Date().toISOString().split('T')[0],
+  paymentMethod: 'QR Payment',
+  status: 'processing',
+  trackingNumber: 'TRACK' + Math.floor(100000 + Math.random() * 900000),
+  total: getCartTotal(),
+  items: [...cart],
+  sustainabilityImpact: `${Math.round(
+    cart.reduce((sum, item) => sum + item.sustainabilityScore, 0) /
+    cart.length
+  )}%`
+};
+
 
     setOrders(prevOrders => [newOrder, ...prevOrders]);
     setShowPaymentQR(false);
@@ -733,15 +574,38 @@ const TrackingStep = ({ label, active, date }) => (
 );
 
 
- return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-gray-50">
-     
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Leaf className="text-green-500 mr-2" size={28} />
+              <h1 className="text-2xl font-bold text-gray-800">EcoShop</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center">
+                <TrendingUp className="text-green-500 mr-2" size={20} />
+                <span className="text-sm text-gray-600">Eco Score: {userScore}</span>
+              </div>
+              <div className="relative">
+                <ShoppingCart className="text-gray-600" size={24} />
+                {cart.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cart.length}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-       <nav className="bg-gradient-to-r from-green-600 to-teal-700 text-white shadow-md">
+      <nav className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex space-x-1">
+          <div className="flex space-x-8">
             {[
-              { id: 'browse', label: 'Browse', icon: Search },
+              { id: 'browse', label: 'Browse Products', icon: Search },
               { id: 'cart', label: 'Cart', icon: ShoppingCart },
               { id: 'orders', label: 'Orders', icon: Package },
               { id: 'wishlist', label: 'Wishlist', icon: Heart },
@@ -750,10 +614,10 @@ const TrackingStep = ({ label, active, date }) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center px-6 py-4 border-b-2 transition-all ${
+                className={`flex items-center px-4 py-4 border-b-2 transition-colors ${
                   activeTab === tab.id 
-                    ? 'border-green-300 bg-white/10 text-white' 
-                    : 'border-transparent text-green-100 hover:bg-white/5'
+                    ? 'border-green-500 text-green-600' 
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
                 <tab.icon size={20} className="mr-2" />
@@ -800,4 +664,3 @@ const TrackingStep = ({ label, active, date }) => (
 };
 
 export default CustomerDashboard;
-

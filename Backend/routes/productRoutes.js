@@ -99,7 +99,7 @@ router.post("/add",isAuthenticated, async (req, res) => {
     imageUrl,
     recyclablePercent,
     supplierRating,
-    
+    price,
     packagingType,
     transportDistanceKm,
     
@@ -122,6 +122,7 @@ router.post("/add",isAuthenticated, async (req, res) => {
     supplierRating,
     carbonFootprint,
     sustainabilityScore,
+    price,
     packagingType,
      transportDistanceKm,
     retailerId: req.id,
