@@ -9,6 +9,7 @@ export default function AddProduct() {
     recyclablePercent: "",
     supplierRating: "",
      transportDistanceKm: "",
+     price:"",
     packagingType: "",
     image: null,
   });
@@ -67,8 +68,9 @@ export default function AddProduct() {
       category: formData.category,
       recyclablePercent: formData.recyclablePercent,
       supplierRating: formData.supplierRating,
-      carbonFootprint: formData.carbonFootprint,
+    
       packagingType: formData.packagingType,
+      price:formData.price,
        transportDistanceKm: formData.transportDistanceKm,
       imageUrl,
     };
@@ -89,8 +91,9 @@ export default function AddProduct() {
         category: "",
         recyclablePercent: "",
         supplierRating: "",
-        carbonFootprint: "",
+       
         packagingType: "",
+        price:"",
          transportDistanceKm: "",
         image: null,
       });
@@ -127,15 +130,16 @@ export default function AddProduct() {
   };
 
   return (
-    <Card className="max-w-xl mx-auto mt-6">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] ">
+      <Card className="max-w-xl mx-auto mt-6">
       <CardContent className="p-6">
-        <h2 className="text-2xl font-semibold mb-4">Add New Product</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-white">Add New Product</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             name="name"
             placeholder="Product Name"
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 font-bold rounded text-white"
             value={formData.name}
             onChange={handleChange}
             required
@@ -154,7 +158,7 @@ export default function AddProduct() {
             value={formData.category}
             onChange={handleChange}
             required
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded font-bold rounded text-black"
           >
             <option value="">Select category Type</option>
             <option value="Bamboo">Bamboo</option>
@@ -168,7 +172,7 @@ export default function AddProduct() {
             type="number"
             name="recyclablePercent"
             placeholder="Recyclable (%)"
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded font-bold rounded text-white"
             value={formData.recyclablePercent}
             onChange={handleChange}
             required
@@ -177,8 +181,17 @@ export default function AddProduct() {
             type="number"
             name="supplierRating"
             placeholder="Supplier Rating (1-10)"
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded font-bold rounded text-white"
             value={formData.supplierRating}
+            onChange={handleChange}
+            required
+          />
+           <input
+            type="text"
+            name="price"
+            placeholder="Enter Price"
+            className="w-full border p-2 font-bold rounded text-white"
+            value={formData.price}
             onChange={handleChange}
             required
           />
@@ -187,7 +200,7 @@ export default function AddProduct() {
             value={formData.packagingType}
             onChange={handleChange}
             required
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded font-bold rounded text-black"
           >
             <option value="">Select Packaging Type</option>
             <option value="Plastic-Free">Plastic-Free</option>
@@ -200,7 +213,7 @@ export default function AddProduct() {
   type="number"
   name="transportDistanceKm"
   placeholder="Transport Distance (in km)"
-  className="w-full border p-2 rounded"
+  className="w-full border p-2 rounded font-bold rounded text-white"
   value={formData.transportDistanceKm}
   onChange={handleChange}
   required
@@ -210,7 +223,7 @@ export default function AddProduct() {
           <input
             type="file"
             name="image"
-            className="w-full"
+            className="w-full font-bold rounded text-white"
             accept="image/*"
             onChange={handleChange}
             required
@@ -255,5 +268,8 @@ export default function AddProduct() {
         {message && <p className="mt-4 text-center text-sm">{message}</p>}
       </CardContent>
     </Card>
+
+    </div>
+    
   );
 }

@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema({
     required: true,
     enum: ['Cotton', 'Plastic', 'Aluminum', 'Bamboo', 'Paper', 'Other','glass'],
   },
+  price:Number,
   imageUrl: String,
   recyclablePercent: Number,
   supplierRating: Number,
