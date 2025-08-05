@@ -16,9 +16,8 @@ router.get("/", isAuthenticated, async (req, res) => {
     const avgSustainabilityScore =
       totalProducts === 0
         ? 0
-        : products.reduce((sum, p) => sum + (p.ecoScore || 0), 0) / totalProducts;
+        : products.reduce((sum, p) => sum + (p.sustainabilityScore || 0), 0) / totalProducts;
 
-    // This month emissions (1 product = 10 kg CO₂)
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
@@ -26,10 +25,14 @@ router.get("/", isAuthenticated, async (req, res) => {
       const date = new Date(p.createdAt);
       return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
     });
-    const thisMonthEmissions = thisMonthProducts.length * 10;
+   const thisMonthEmissions = thisMonthProducts.reduce(
+  (total, product) => total + (product.carbonFootprint || 0),
+  0
+);
+
 
     // Green product percent
-    const greenProducts = products.filter((p) => (p.ecoScore || 0) >= 80);
+    const greenProducts = products.filter((p) => (p.sustainabilityScore || 0) >= 80);
     const greenProductPercent =
       totalProducts === 0
         ? 0
@@ -50,10 +53,16 @@ router.get("/", isAuthenticated, async (req, res) => {
         );
       });
 
-      emissionsData.push({
-        month,
-        emissions: monthlyProducts.length * 10, // 10kg CO₂ per product
-      });
+      const totalEmissions = monthlyProducts.reduce(
+  (sum, p) => sum + (p.carbonFootprint || 0),
+  0
+);
+
+emissionsData.push({
+  month,
+  emissions: totalEmissions,
+});
+
     }
 
     // Top 3 products by ecoScore
